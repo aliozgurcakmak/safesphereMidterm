@@ -1,0 +1,465 @@
+-- SafeSphere database script
+-- This script was simplified for the project submission.
+
+IF DB_ID('SafeSphereDB') IS NULL
+BEGIN
+    CREATE DATABASE SafeSphereDB;
+END
+GO
+
+USE SafeSphereDB;
+GO
+
+-- =====================
+-- TABLES
+-- =====================
+
+-- Alerts table
+CREATE TABLE Alerts (
+    alert_id INT IDENTITY(1,1) NOT NULL,
+    disaster_id INT NOT NULL,
+    created_by INT NOT NULL,
+    alert_title VARCHAR(150) NOT NULL,
+    alert_message VARCHAR(500) NOT NULL,
+    alert_level VARCHAR(30) NULL,
+    created_at DATETIME NULL,
+    PRIMARY KEY (alert_id)
+);
+GO
+
+-- CasualtyReports table
+CREATE TABLE CasualtyReports (
+    casualty_report_id INT IDENTITY(1,1) NOT NULL,
+    disaster_id INT NOT NULL,
+    reported_by INT NOT NULL,
+    status_id INT NOT NULL,
+    injured_count INT NULL,
+    missing_count INT NULL,
+    deceased_count INT NULL,
+    report_date DATETIME NULL,
+    PRIMARY KEY (casualty_report_id)
+);
+GO
+
+-- DamageReports table
+CREATE TABLE DamageReports (
+    damage_report_id INT IDENTITY(1,1) NOT NULL,
+    disaster_id INT NOT NULL,
+    reported_by INT NOT NULL,
+    status_id INT NOT NULL,
+    building_damage_level VARCHAR(50) NULL,
+    infrastructure_damage_level VARCHAR(50) NULL,
+    description VARCHAR(500) NULL,
+    report_date DATETIME NULL,
+    PRIMARY KEY (damage_report_id)
+);
+GO
+
+-- DisasterLocations table
+CREATE TABLE DisasterLocations (
+    location_id INT IDENTITY(1,1) NOT NULL,
+    disaster_id INT NOT NULL,
+    latitude DECIMAL(9, 6) NULL,
+    longitude DECIMAL(9, 6) NULL,
+    address_text VARCHAR(255) NULL,
+    PRIMARY KEY (location_id)
+);
+GO
+
+-- Disasters table
+CREATE TABLE Disasters (
+    disaster_id INT IDENTITY(1,1) NOT NULL,
+    disaster_type_id INT NOT NULL,
+    severity_id INT NOT NULL,
+    province_id INT NOT NULL,
+    district_id INT NULL,
+    disaster_title VARCHAR(150) NOT NULL,
+    description VARCHAR(500) NULL,
+    start_date DATETIME NOT NULL,
+    status VARCHAR(30) NULL,
+    PRIMARY KEY (disaster_id)
+);
+GO
+
+-- DisasterSeverityLevels table
+CREATE TABLE DisasterSeverityLevels (
+    severity_id INT IDENTITY(1,1) NOT NULL,
+    severity_name VARCHAR(30) NOT NULL,
+    severity_score INT NOT NULL,
+    PRIMARY KEY (severity_id)
+);
+GO
+
+-- DisasterTypes table
+CREATE TABLE DisasterTypes (
+    disaster_type_id INT IDENTITY(1,1) NOT NULL,
+    disaster_type_name VARCHAR(50) NOT NULL,
+    PRIMARY KEY (disaster_type_id)
+);
+GO
+
+-- Districts table
+CREATE TABLE Districts (
+    district_id INT IDENTITY(1,1) NOT NULL,
+    province_id INT NOT NULL,
+    district_name VARCHAR(50) NOT NULL,
+    PRIMARY KEY (district_id)
+);
+GO
+
+-- Notifications table
+CREATE TABLE Notifications (
+    notification_id INT IDENTITY(1,1) NOT NULL,
+    alert_id INT NOT NULL,
+    user_id INT NOT NULL,
+    is_read BIT NULL,
+    sent_at DATETIME NULL,
+    PRIMARY KEY (notification_id)
+);
+GO
+
+-- Organizations table
+CREATE TABLE Organizations (
+    organization_id INT IDENTITY(1,1) NOT NULL,
+    organization_name VARCHAR(100) NOT NULL,
+    organization_type VARCHAR(50) NULL,
+    phone VARCHAR(20) NULL,
+    email VARCHAR(100) NULL,
+    PRIMARY KEY (organization_id)
+);
+GO
+
+-- Provinces table
+CREATE TABLE Provinces (
+    province_id INT IDENTITY(1,1) NOT NULL,
+    province_name VARCHAR(50) NOT NULL,
+    region_name VARCHAR(50) NULL,
+    PRIMARY KEY (province_id)
+);
+GO
+
+-- ReportAttachments table
+CREATE TABLE ReportAttachments (
+    attachment_id INT IDENTITY(1,1) NOT NULL,
+    damage_report_id INT NULL,
+    casualty_report_id INT NULL,
+    file_name VARCHAR(150) NOT NULL,
+    file_url VARCHAR(255) NULL,
+    uploaded_at DATETIME NULL,
+    PRIMARY KEY (attachment_id)
+);
+GO
+
+-- ReportStatuses table
+CREATE TABLE ReportStatuses (
+    status_id INT IDENTITY(1,1) NOT NULL,
+    status_name VARCHAR(50) NOT NULL,
+    PRIMARY KEY (status_id)
+);
+GO
+
+-- RescueTasks table
+CREATE TABLE RescueTasks (
+    task_id INT IDENTITY(1,1) NOT NULL,
+    disaster_id INT NOT NULL,
+    team_id INT NOT NULL,
+    assigned_by INT NOT NULL,
+    task_title VARCHAR(150) NOT NULL,
+    task_description VARCHAR(500) NULL,
+    task_status VARCHAR(30) NULL,
+    assigned_date DATETIME NULL,
+    PRIMARY KEY (task_id)
+);
+GO
+
+-- RescueTeams table
+CREATE TABLE RescueTeams (
+    team_id INT IDENTITY(1,1) NOT NULL,
+    organization_id INT NOT NULL,
+    team_name VARCHAR(100) NOT NULL,
+    team_status VARCHAR(30) NULL,
+    PRIMARY KEY (team_id)
+);
+GO
+
+-- ResourceAllocations table
+CREATE TABLE ResourceAllocations (
+    allocation_id INT IDENTITY(1,1) NOT NULL,
+    disaster_id INT NOT NULL,
+    resource_id INT NOT NULL,
+    warehouse_id INT NOT NULL,
+    allocated_quantity INT NOT NULL,
+    allocated_by INT NOT NULL,
+    allocation_date DATETIME NULL,
+    PRIMARY KEY (allocation_id)
+);
+GO
+
+-- Resources table
+CREATE TABLE Resources (
+    resource_id INT IDENTITY(1,1) NOT NULL,
+    resource_type_id INT NOT NULL,
+    resource_name VARCHAR(100) NOT NULL,
+    unit VARCHAR(30) NOT NULL,
+    PRIMARY KEY (resource_id)
+);
+GO
+
+-- ResourceStock table
+CREATE TABLE ResourceStock (
+    stock_id INT IDENTITY(1,1) NOT NULL,
+    warehouse_id INT NOT NULL,
+    resource_id INT NOT NULL,
+    quantity INT NOT NULL,
+    PRIMARY KEY (stock_id)
+);
+GO
+
+-- ResourceTypes table
+CREATE TABLE ResourceTypes (
+    resource_type_id INT IDENTITY(1,1) NOT NULL,
+    resource_type_name VARCHAR(50) NOT NULL,
+    PRIMARY KEY (resource_type_id)
+);
+GO
+
+-- ResourceWarehouses table
+CREATE TABLE ResourceWarehouses (
+    warehouse_id INT IDENTITY(1,1) NOT NULL,
+    province_id INT NOT NULL,
+    district_id INT NULL,
+    warehouse_name VARCHAR(100) NOT NULL,
+    address_text VARCHAR(255) NULL,
+    PRIMARY KEY (warehouse_id)
+);
+GO
+
+-- Roles table
+CREATE TABLE Roles (
+    role_id INT IDENTITY(1,1) NOT NULL,
+    role_name VARCHAR(50) NOT NULL,
+    PRIMARY KEY (role_id)
+);
+GO
+
+-- TeamLocationLogs table
+CREATE TABLE TeamLocationLogs (
+    log_id INT IDENTITY(1,1) NOT NULL,
+    team_id INT NOT NULL,
+    disaster_id INT NULL,
+    latitude DECIMAL(9, 6) NULL,
+    longitude DECIMAL(9, 6) NULL,
+    log_time DATETIME NULL,
+    PRIMARY KEY (log_id)
+);
+GO
+
+-- TeamMembers table
+CREATE TABLE TeamMembers (
+    member_id INT IDENTITY(1,1) NOT NULL,
+    team_id INT NOT NULL,
+    user_id INT NOT NULL,
+    position_title VARCHAR(50) NULL,
+    PRIMARY KEY (member_id)
+);
+GO
+
+-- Users table
+CREATE TABLE Users (
+    user_id INT IDENTITY(1,1) NOT NULL,
+    role_id INT NOT NULL,
+    full_name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    password nVARCHAR(255) NOT NULL,
+    phone VARCHAR(20) NULL,
+    is_active BIT NULL,
+    email ASC,
+    PRIMARY KEY (user_id)
+);
+GO
+
+-- =====================
+-- DEFAULT VALUES
+-- =====================
+
+ALTER TABLE Alerts ADD DEFAULT (GETDATE()) FOR created_at;
+GO
+ALTER TABLE CasualtyReports ADD DEFAULT (0) FOR injured_count;
+GO
+ALTER TABLE CasualtyReports ADD DEFAULT (0) FOR missing_count;
+GO
+ALTER TABLE CasualtyReports ADD DEFAULT (0) FOR deceased_count;
+GO
+ALTER TABLE CasualtyReports ADD DEFAULT (GETDATE()) FOR report_date;
+GO
+ALTER TABLE DamageReports ADD DEFAULT (GETDATE()) FOR report_date;
+GO
+ALTER TABLE Disasters ADD DEFAULT ('Active') FOR status;
+GO
+ALTER TABLE Notifications ADD DEFAULT (0) FOR is_read;
+GO
+ALTER TABLE Notifications ADD DEFAULT (GETDATE()) FOR sent_at;
+GO
+ALTER TABLE ReportAttachments ADD DEFAULT (GETDATE()) FOR uploaded_at;
+GO
+ALTER TABLE RescueTasks ADD DEFAULT ('Assigned') FOR task_status;
+GO
+ALTER TABLE RescueTasks ADD DEFAULT (GETDATE()) FOR assigned_date;
+GO
+ALTER TABLE RescueTeams ADD DEFAULT ('Available') FOR team_status;
+GO
+ALTER TABLE ResourceAllocations ADD DEFAULT (GETDATE()) FOR allocation_date;
+GO
+ALTER TABLE TeamLocationLogs ADD DEFAULT (GETDATE()) FOR log_time;
+GO
+ALTER TABLE Users ADD DEFAULT (1) FOR is_active;
+GO
+
+-- =====================
+-- FOREIGN KEYS
+-- =====================
+
+ALTER TABLE Alerts
+ADD CONSTRAINT FK_Alerts_created_by_Users
+FOREIGN KEY (created_by) REFERENCES Users(user_id);
+GO
+ALTER TABLE Alerts
+ADD CONSTRAINT FK_Alerts_disaster_id_Disasters
+FOREIGN KEY (disaster_id) REFERENCES Disasters(disaster_id);
+GO
+ALTER TABLE CasualtyReports
+ADD CONSTRAINT FK_CasualtyReports_disaster_id_Disasters
+FOREIGN KEY (disaster_id) REFERENCES Disasters(disaster_id);
+GO
+ALTER TABLE CasualtyReports
+ADD CONSTRAINT FK_CasualtyReports_reported_by_Users
+FOREIGN KEY (reported_by) REFERENCES Users(user_id);
+GO
+ALTER TABLE CasualtyReports
+ADD CONSTRAINT FK_CasualtyReports_status_id_ReportStatuses
+FOREIGN KEY (status_id) REFERENCES ReportStatuses(status_id);
+GO
+ALTER TABLE DamageReports
+ADD CONSTRAINT FK_DamageReports_disaster_id_Disasters
+FOREIGN KEY (disaster_id) REFERENCES Disasters(disaster_id);
+GO
+ALTER TABLE DamageReports
+ADD CONSTRAINT FK_DamageReports_reported_by_Users
+FOREIGN KEY (reported_by) REFERENCES Users(user_id);
+GO
+ALTER TABLE DamageReports
+ADD CONSTRAINT FK_DamageReports_status_id_ReportStatuses
+FOREIGN KEY (status_id) REFERENCES ReportStatuses(status_id);
+GO
+ALTER TABLE DisasterLocations
+ADD CONSTRAINT FK_DisasterLocations_disaster_id_Disasters
+FOREIGN KEY (disaster_id) REFERENCES Disasters(disaster_id);
+GO
+ALTER TABLE Disasters
+ADD CONSTRAINT FK_Disasters_disaster_type_id_DisasterTypes
+FOREIGN KEY (disaster_type_id) REFERENCES DisasterTypes(disaster_type_id);
+GO
+ALTER TABLE Disasters
+ADD CONSTRAINT FK_Disasters_district_id_Districts
+FOREIGN KEY (district_id) REFERENCES Districts(district_id);
+GO
+ALTER TABLE Disasters
+ADD CONSTRAINT FK_Disasters_province_id_Provinces
+FOREIGN KEY (province_id) REFERENCES Provinces(province_id);
+GO
+ALTER TABLE Disasters
+ADD CONSTRAINT FK_Disasters_severity_id_DisasterSeverityLevels
+FOREIGN KEY (severity_id) REFERENCES DisasterSeverityLevels(severity_id);
+GO
+ALTER TABLE Districts
+ADD CONSTRAINT FK_Districts_province_id_Provinces
+FOREIGN KEY (province_id) REFERENCES Provinces(province_id);
+GO
+ALTER TABLE Notifications
+ADD CONSTRAINT FK_Notifications_alert_id_Alerts
+FOREIGN KEY (alert_id) REFERENCES Alerts(alert_id);
+GO
+ALTER TABLE Notifications
+ADD CONSTRAINT FK_Notifications_user_id_Users
+FOREIGN KEY (user_id) REFERENCES Users(user_id);
+GO
+ALTER TABLE ReportAttachments
+ADD CONSTRAINT FK_ReportAttachments_casualty_report_id_CasualtyReports
+FOREIGN KEY (casualty_report_id) REFERENCES CasualtyReports(casualty_report_id);
+GO
+ALTER TABLE ReportAttachments
+ADD CONSTRAINT FK_ReportAttachments_damage_report_id_DamageReports
+FOREIGN KEY (damage_report_id) REFERENCES DamageReports(damage_report_id);
+GO
+ALTER TABLE RescueTasks
+ADD CONSTRAINT FK_RescueTasks_assigned_by_Users
+FOREIGN KEY (assigned_by) REFERENCES Users(user_id);
+GO
+ALTER TABLE RescueTasks
+ADD CONSTRAINT FK_RescueTasks_disaster_id_Disasters
+FOREIGN KEY (disaster_id) REFERENCES Disasters(disaster_id);
+GO
+ALTER TABLE RescueTasks
+ADD CONSTRAINT FK_RescueTasks_team_id_RescueTeams
+FOREIGN KEY (team_id) REFERENCES RescueTeams(team_id);
+GO
+ALTER TABLE RescueTeams
+ADD CONSTRAINT FK_RescueTeams_organization_id_Organizations
+FOREIGN KEY (organization_id) REFERENCES Organizations(organization_id);
+GO
+ALTER TABLE ResourceAllocations
+ADD CONSTRAINT FK_ResourceAllocations_allocated_by_Users
+FOREIGN KEY (allocated_by) REFERENCES Users(user_id);
+GO
+ALTER TABLE ResourceAllocations
+ADD CONSTRAINT FK_ResourceAllocations_disaster_id_Disasters
+FOREIGN KEY (disaster_id) REFERENCES Disasters(disaster_id);
+GO
+ALTER TABLE ResourceAllocations
+ADD CONSTRAINT FK_ResourceAllocations_resource_id_Resources
+FOREIGN KEY (resource_id) REFERENCES Resources(resource_id);
+GO
+ALTER TABLE ResourceAllocations
+ADD CONSTRAINT FK_ResourceAllocations_warehouse_id_ResourceWarehouses
+FOREIGN KEY (warehouse_id) REFERENCES ResourceWarehouses(warehouse_id);
+GO
+ALTER TABLE Resources
+ADD CONSTRAINT FK_Resources_resource_type_id_ResourceTypes
+FOREIGN KEY (resource_type_id) REFERENCES ResourceTypes(resource_type_id);
+GO
+ALTER TABLE ResourceStock
+ADD CONSTRAINT FK_ResourceStock_resource_id_Resources
+FOREIGN KEY (resource_id) REFERENCES Resources(resource_id);
+GO
+ALTER TABLE ResourceStock
+ADD CONSTRAINT FK_ResourceStock_warehouse_id_ResourceWarehouses
+FOREIGN KEY (warehouse_id) REFERENCES ResourceWarehouses(warehouse_id);
+GO
+ALTER TABLE ResourceWarehouses
+ADD CONSTRAINT FK_ResourceWarehouses_district_id_Districts
+FOREIGN KEY (district_id) REFERENCES Districts(district_id);
+GO
+ALTER TABLE ResourceWarehouses
+ADD CONSTRAINT FK_ResourceWarehouses_province_id_Provinces
+FOREIGN KEY (province_id) REFERENCES Provinces(province_id);
+GO
+ALTER TABLE TeamLocationLogs
+ADD CONSTRAINT FK_TeamLocationLogs_disaster_id_Disasters
+FOREIGN KEY (disaster_id) REFERENCES Disasters(disaster_id);
+GO
+ALTER TABLE TeamLocationLogs
+ADD CONSTRAINT FK_TeamLocationLogs_team_id_RescueTeams
+FOREIGN KEY (team_id) REFERENCES RescueTeams(team_id);
+GO
+ALTER TABLE TeamMembers
+ADD CONSTRAINT FK_TeamMembers_team_id_RescueTeams
+FOREIGN KEY (team_id) REFERENCES RescueTeams(team_id);
+GO
+ALTER TABLE TeamMembers
+ADD CONSTRAINT FK_TeamMembers_user_id_Users
+FOREIGN KEY (user_id) REFERENCES Users(user_id);
+GO
+ALTER TABLE Users
+ADD CONSTRAINT FK_Users_role_id_Roles
+FOREIGN KEY (role_id) REFERENCES Roles(role_id);
+GO
