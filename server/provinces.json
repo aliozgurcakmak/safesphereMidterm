@@ -1,0 +1,117 @@
+[
+  {
+    "province_id": "1",
+    "province_name": "Istanbul",
+    "region_name": "Marmara"
+  },
+  {
+    "province_id": "2",
+    "province_name": "Kutahya",
+    "region_name": "Ege"
+  },
+  {
+    "province_id": "3",
+    "province_name": "Antalya",
+    "region_name": "Akdeniz"
+  },
+  {
+    "province_id": "4",
+    "province_name": "Mugla",
+    "region_name": "Ege"
+  },
+  {
+    "province_id": "5",
+    "province_name": "Malatya",
+    "region_name": "Dogu Anadolu"
+  },
+  {
+    "province_id": "6",
+    "province_name": "Izmir",
+    "region_name": "Ege"
+  },
+  {
+    "province_id": "7",
+    "province_name": "Van",
+    "region_name": "Dogu Anadolu"
+  },
+  {
+    "province_id": "8",
+    "province_name": "Tokat",
+    "region_name": "Karadeniz"
+  },
+  {
+    "province_id": "9",
+    "province_name": "Kahramanmaras",
+    "region_name": "Akdeniz"
+  },
+  {
+    "province_id": "10",
+    "province_name": "Adana",
+    "region_name": "Akdeniz"
+  },
+  {
+    "province_id": "11",
+    "province_name": "Erzincan",
+    "region_name": "Dogu Anadolu"
+  },
+  {
+    "province_id": "12",
+    "province_name": "Sanliurfa",
+    "region_name": "Guneydogu Anadolu"
+  },
+  {
+    "province_id": "13",
+    "province_name": "Adiyaman",
+    "region_name": "Guneydogu Anadolu"
+  },
+  {
+    "province_id": "14",
+    "province_name": "Samsun",
+    "region_name": "Karadeniz"
+  },
+  {
+    "province_id": "15",
+    "province_name": "Ordu",
+    "region_name": "Karadeniz"
+  },
+  {
+    "province_id": "16",
+    "province_name": "Artvin",
+    "region_name": "Karadeniz"
+  },
+  {
+    "province_id": "17",
+    "province_name": "Rize",
+    "region_name": "Karadeniz"
+  },
+  {
+    "province_id": "18",
+    "province_name": "Trabzon",
+    "region_name": "Karadeniz"
+  },
+  {
+    "province_id": "19",
+    "province_name": "Karabuk",
+    "region_name": "Karadeniz"
+  },
+  {
+    "province_id": "20",
+    "province_name": "Bursa",
+    "region_name": "Marmara"
+  },
+  {
+    "province_id": "21",
+    "province_name": "Osmaniye",
+    "region_name": "Akdeniz"
+  },
+  {
+    "province_id": "22",
+    "province_name": "Mersin",
+    "region_name": "Akdeniz"
+  },
+  {
+    "province_id": "23",
+    "province_name": "Hatay",
+    "region_name": "Akdeniz"
+  }
+]
