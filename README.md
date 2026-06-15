@@ -140,6 +140,8 @@ If database connectivity issues occur:
 ## Course Information
 
 MISY2244 – Information Systems Analysis and Design
+MISY1106 – Database Systems and Applications
+
 
 FMV Işık University
 
